@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ex5_Tabs</title>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+</head>
+<body>
+    <div id="myTab">
+        <ul>
+            <li><a href="#tab1">탭1</a></li>
+            <li><a href="#tab2">탭2</a></li>
+        </ul>
+
+        <div id="tab1">탭1의 내용입니다.</div>
+        <div id="tab2">탭2의 내용입니다.</div>
+    </div>
+
+    <button type="button" id="enable">사용가능</button>
+    <button type="button" id="disable">사용불가</button>
+    <hr/>
+
+    <button type="button" id="addTab">탭 추가</button>
+    <label for="idx">인덱스: </label>
+    <input type="number" id="idx" min="0" max="0" value="0"/>
+    <button type="button" id="delTab">탭 삭제</button>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+    
+    <script>
+        let count = 0;
+        let tabCount = $("ul>li").length;
+        $(function(){
+            $("#myTab").tabs({
+                // disabled: [1] // 두번째 탭 비활성화
+            });
+            findIdx();
+        });
+
+        $("#disable").click(function(){
+            $("#myTab").tabs("disable",1);
+        });
+        
+        $("#enable").click(function(){
+            $("#myTab").tabs("enable",1);
+        });
+
+        $(":button").button();
+
+
+
+        $("#addTab").click(function(){
+            let index = tabCount+1;
+            let tabContent = "<div id='tab"+index+"'>탭"+index+"의 내용입니다.</div>";
+
+            let tab = "<li><a href='#tab"+index+"'>탭"+index+"</a></li>";
+
+            $("#myTab").append(tabContent);
+
+            $("#myTab ul").append(tab);
+
+            $("#myTab").tabs("refresh");
+            findIdx();
+            tabCount++;
+        });
+
+        $("#delTab").click(function(){
+            let index = parseInt($("#idx").val());
+
+            // $("#myTab ul li:nth-child("+index+")").remove();
+            // $("#tab"+index).remove();
+
+            $("#myTab ul li").eq(index).remove();
+            $("#myTab>div").eq(index).remove();
+
+            $("#myTab").tabs("refresh");
+        });
+
+
+        function findIdx(){
+            count = $("ul>li").length;
+            $("#idx").prop("max",count-1);
+        }
+
+    </script>
+</body>
+</html>

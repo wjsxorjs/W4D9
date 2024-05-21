@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ex6_비동기식통신</title>
+<!--
+    XHR: XML HTTPS REQUEST 비동기식 통신에 필요하며
+    클라이언트(웹 브라우저)가 XHR에 요청을 보내면 XHR은 서버에게 해당 요청을 보낸다.
+    이때 웹 브라우저는 다른 것을 수행할 수 있다. $.ajax().done();
+    서버가 응답결과를 보낼 때도 XHR에게 준다. 이때 결과는 결과코드로 준다.
+    호출하는 서버의 경로가 잘못된 경우 400번대의 결과 코드가 나온다.
+    서버에서 문법적인 오류가 발생한 경우 500번대의 결과 코드가 나온다.
+-->
+<style>
+        #comp{
+            width: 300px;
+            padding: 5px;
+        }
+        #t1{
+            width: 600px;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+        #t1 th, #t1 td{
+            padding: 4px;
+            border: 1px solid #dedede;
+            border-left: none;
+        }
+        #t1 th:last-child, #t1 td:last-child{
+            border-right: none;
+        }
+        .w100{
+            width: 80px;
+
+        }
+    </style>
+</head>
+<body>
+    <form action="" method="get">
+        <fieldset>
+            <legend>비동기식통신</legend>
+            <label for="comp">제조회사</label>
+            <input type="text" id="comp" />
+            <button type="button" onclick="exe()">확인</button>
+        </fieldset>
+    </form>
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        function exe(){
+            // 사용자가 입력한 제조히사명 받아오기
+            let comp = $("#comp").val().trim();
+            if(comp.length>0){
+                // 비동기식통신
+                $.ajax({
+                    url: "https://makeup-api.herokuapp.com/api/v1/products.json", // 서버의 경로
+                    data: "brand="+comp,
+                    type: "GET",
+                    dataType: "JSON"
+                }).done(function(res){
+                    console.log(res);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
