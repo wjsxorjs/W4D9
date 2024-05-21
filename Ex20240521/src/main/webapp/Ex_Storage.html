@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ex_Storage</title>
+<style>
+#results{
+    border-top: 2px solid #ababab;
+}
+</style>
+</head>
+<body>
+	    <div id="content">
+        <header>
+            <h1>Storage</h1>
+        </header>
+        <div id="form">
+            <form id="travelForm">
+                <table class="form">
+                    <tbody>
+                        <tr>
+                            <td class="label">Traveler</td>
+                            <td>
+                                <input type="text" name="traveler" id="traveler" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label">Destination</td>
+                            <td>
+                                <input type="text" name="destination" id="destination" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="label">Transportation</td>
+                            <td>
+                                <input type="text" name="transportation" id="transportation" />
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2" class="button">
+                                <button type="button" onclick="addData()">
+                                    Save
+                                </button>
+                                <button type="button" onclick="clearStorage()">
+                                    Clear Storage
+                                </button>
+                                <button type="button" onclick="change_type()">
+                                    Change Type
+                                </button>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </form>
+        </div>
+        <div id="results">
+            <!-- 저장된 storage값을 표현하는 곳 -->
+        </div>
+    </div>
+
+<script>
+    let storage = true;
+    let db = getStorage();
+    
+    let res;
+
+    window.onload = function (){
+        document.getElementById("results").innerHTML = res;
+        init();
+    }
+
+    function change_type(){
+        clearStorage();
+        storage = !storage;
+        getStorage();
+        addData();
+        init();
+    }
+
+    function getStorage(){
+        try {
+            // 현재 브라우저가 localStorage를 사용할 수 있는지?
+            // 검증한 후 저장소를 반환한다.
+            if(storage){
+                if(window.localStorage){
+                    document.getElementsByTagName("h1")[0].innerText = "Local Storage";
+                    return window.localStorage;
+                }
+            } else {
+                if(window.sessionStorage){
+                    document.getElementsByTagName("h1")[0].innerText = "Session Storage";
+                    return window.sessionStorage;
+                }
+            }
+        } catch (e) {
+            return undefined
+        }
+    };
+
+    function init(){
+
+        // 만약,저장소에 저장된 값이 있을때 results라는 아이디를 가진 ldiv에 표현하는 함수
+
+        // 결과 값 초기화
+        let result = "";
+
+        // 저장소에 저장된 key와 value를 얻어내어
+        // result변수에 적재한다.
+
+        for(let i=0;i<db.length;i++){
+            // 저장소에 저장된 값들은 key와 value가 쌍으로 짝을 이뤄서 저장됨
+            //  자바의 Map과 유사하다.
+            let key = db.key(i);
+
+            let value = db.getItem(key);
+            result += key+": "+value+"<br/>"
+
+        }
+
+        document.getElementById("results").innerHTML = result;
+        res = result;
+        console.log(res);
+    }
+        
+    
+    function addData(){
+        // 사용자가 입력한 값들을 가져온다.
+        let v1 = document.getElementById("traveler").value;
+        let v2 = document.getElementById("destination").value;
+        let v3 = document.getElementById("transportation").value;
+        // 유효성검사는 생략한다.
+        // 저장소에 키와 값을 연결시켜 저장
+        db.setItem("traveler",v1);
+        db.setItem("destination",v2);
+        db.setItem("transportation",v3);
+        
+        init();
+    };
+
+
+    function clearStorage(){
+        // 저장소에 있는 모든 자원들을 삭제
+        db.clear();
+
+        // db.removeItem(key) : 특정 자원만 삭제할 때
+    }
+
+</script>
+	
+</body>
+</html>
