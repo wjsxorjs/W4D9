@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ex4_Modal</title>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+
+</head>
+<body>
+    <button type="button" id="bt1">버튼1</button>
+    <button type="button" id="bt2">버튼2</button>
+    <button type="button" id="bt3">버튼3</button>
+
+    <!-- 공지사항 대화창 -->
+    <div id="notice" title="쌍용교육센터">
+        공지사항<br/>
+        쌍용교육센터는 IT전문가들을 위한 교육시스템을 기반으로 하는<br/>
+        온/오프라인 교육기술 협회인 오경주기술협회 산하<br/>
+        우수한 교육센터입니다.
+        <button type="button" id="close_btn">닫기</button>
+    </div>
+
+
+    <!-- ============== -->
+
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+    <script>
+        $(function(){
+            let option = {
+                autoOpen: false,
+                resizable: false,
+                position: {my:"left top", at:"right bottom", of:"#bt3"}
+                // my: "자신의 위치", at: "기점(요소)의 위치", of: "기점이 되는 요소"
+                // 나의 좌측 상단이 #bt3의 우측하단에 오도록 위치시키겠다.
+            }; // JSON 표기법
+
+            $("#notice").dialog(option);
+        });
+
+        $("button").button();
+        $("#bt1").click(function(){
+            $("#notice").dialog({modal: false, title:"#bt1"});
+            $("#notice").dialog("open");
+        });
+        $("#bt2").click(function(){
+            $("#notice").dialog({modal: true, title:"#bt2"});
+            $("#notice").dialog("open");
+        });
+
+        $("#close_btn").click(function(){
+            $("#notice").dialog("close");
+        });
+        
+    </script>
+</body>
+</html>
