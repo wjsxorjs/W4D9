@@ -21,6 +21,11 @@
             border-collapse: collapse;
             margin-top: 30px;
         }
+        #t1 td a{
+            text-decoration: none;
+            color: #000;
+        }
+
         #t1 th, #t1 td{
             padding: 4px;
             border: 1px solid #dedede;
@@ -29,7 +34,7 @@
         #t1 th:last-child, #t1 td:last-child{
             border-right: none;
         }
-        .w100{
+        .w80{
             width: 80px;
 
         }
@@ -44,24 +49,61 @@
             <button type="button" onclick="exe()">확인</button>
         </fieldset>
     </form>
+    <div id="content">
+        <table id="t1">
+            <colgroup>
+                <col width="120px"/>
+                <col width="*"/>
+                <col width="60px"/>
+                <col width="150px"/>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>이미지</th>
+                    <th>제품명</th>
+                    <th>가격</th>
+                    <th>등록일</th>
+                </tr>
+            </thead>
+            <tbody>
 
-
-
+            </tbody>
+        </table>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script>
         function exe(){
             // 사용자가 입력한 제조히사명 받아오기
             let comp = $("#comp").val().trim();
+            let type = "eyeliner";
             if(comp.length>0){
                 // 비동기식통신
                 $.ajax({
                     url: "https://makeup-api.herokuapp.com/api/v1/products.json", // 서버의 경로
-                    data: "brand="+comp,
-                    type: "GET",
-                    dataType: "JSON"
-                }).done(function(res){
-                    console.log(res);
+                    //data: "brand="+comp+"&product_type="+type, // 서버에게 보낼 인자 | 없으면 생략 가능
+                    data: {
+                        "brand": comp,
+                        "product_type": "bronzer"
+                    },
+                    type: "GET", // 요청 방식 (GET / POST) < 서버에서 정해준다.
+                    dataType: "JSON" // 결과물의 자료형
+                }).done(function(res){  // 요청에 성공했을 때 결과가 이 영역으로 들어온다.
+                                        // 해당 결과는 인자 res를 통해 접근이 가능하다.
+                    // console.log(res);
+                    let msg = "";
+                    for(let i=0;i<res.length;i++){
+                        msg += "<tr>";
+                        msg += "<td><img src='"+res[i].image_link+"' class='w80'/></td>";
+                        msg += "<td><a href='"+res[i].product_link+"' target='_blank'>"+res[i].name+"</a></td>";
+                        msg += "<td>"+res[i].price+"</td>";
+                        msg += "<td>"+res[i].created_at+"</td>";
+                        msg += "</tr>";
+                        $("#t1 tbody").html(msg);
+                    }
+
+                }).fail(function(err){  // 요청 시 오류가 발생했다면 이 영역으로 들어온다.
+                                        // 서버에서 발생한 오류는 done()으로 들어간다.
                 });
             }
         }
